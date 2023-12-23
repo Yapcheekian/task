@@ -1,0 +1,24 @@
+version: '3.4'
+
+x-common-build:
+  &common-build
+  image: golang:1.21
+  working_dir: /src
+  volumes:
+    - .:/src
+    - ${LOCAL_GOPATH}/pkg/mod/cache:/go/pkg/mod/cache
+
+services:
+  test:
+    <<: *common-build
+    command: [ "make", "test" ]
+
+  build:
+    <<: *common-build
+    command: [ "make", "build" ]
+
+  task:
+    <<: *common-build
+    command: [ "make", "task" ]
+    ports:
+      - "8080:8080"
